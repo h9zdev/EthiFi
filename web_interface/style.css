@@ -1,0 +1,997 @@
+/* This software is licensed under the MIT License: https://github.com/spacehuhntech/esp8266_deauther */
+
+/* ── CSS VARIABLES FOR TACTICAL CYBERPUNK ── */
+:root {
+	--primary-color: #00FFD1;
+	--accent-red: #CC3333;
+	--accent-purple: #9D00FF;
+	--background-dark: #050505;
+	--card-background: #0A0A0A;
+	--text-main: #00FFD1;
+	--text-dim: #3A6B6B;
+	--border-color: rgba(0, 255, 209, 0.25);
+}
+
+/* Global */
+body {
+	background: var(--background-dark);
+	color: var(--text-main);
+	font-family: 'Share Tech Mono', sans-serif;
+	margin: 0;
+	letter-spacing: 0.5px;
+}
+
+h1 {
+	font-size: 1.7rem;
+    margin-top: 1rem;
+    background: rgba(0, 255, 209, 0.06);
+    color: var(--primary-color);
+    padding: 0.2em 1em;
+    border-radius: 0;
+	border-left: solid var(--accent-red) 5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+h2 {
+	font-size: 1.1rem;
+    margin-top: 1rem;
+    background: rgba(0, 255, 209, 0.04);
+    color: var(--primary-color);
+    padding: 0.4em 1.8em;
+    border-radius: 0;
+	border-left: solid var(--accent-red) 5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+table{
+	border-collapse: collapse;
+	width: 100%;
+}
+
+label{
+	line-height: 38px;
+	color: var(--text-main);
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+p{
+	margin: 0.5em 0;
+	color: var(--text-dim);
+}
+
+.left {
+	float: left;
+}
+.right {
+	float: right;
+}
+.bold {
+	font-weight: bold;
+}
+.red{
+	color: var(--accent-red) !important;
+}
+.green{
+	color:#43B581;
+}
+.clear {
+	clear: both;
+}
+.centered{
+	text-align: center;
+}
+.select{
+	width: 98px !important;
+	padding: 0 !important;
+}
+.selected{
+	background: #4974a9;
+}
+.status{
+	width: 120px;
+	padding-left: 8px;
+}
+.labelFix {
+	line-height: 44px;
+}
+.clickable{
+	cursor: pointer;
+}
+.settingName{
+	text-transform: uppercase;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#status {
+	text-align: center;
+	text-transform: uppercase;
+	padding: 5px;
+	color: #fff;
+	position: sticky;
+	top: 0;
+	z-index: 99;
+	background: var(--accent-red);
+	letter-spacing: 1px;
+	font-weight: 700;
+}
+
+#closeError{
+	float: right;
+	color: #fff;
+	padding: 0px 10px;
+	cursor: pointer;
+}
+
+footer {
+	font-size: .95em;
+	text-align: center;
+	margin-top: 3em;
+	margin-bottom: 3em;
+	color: var(--text-dim);
+	border-top: 1px solid var(--border-color);
+	padding-top: 1em;
+}
+
+hr {
+	background: var(--border-color);
+	border: none;
+	height: 1px;
+}
+
+a {
+	color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+	color: var(--accent-red);
+}
+/* Customize the label (the container) */
+.checkBoxContainer {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 32px;
+  color: var(--text-main);
+}
+
+/* Hide the browser's default checkbox */
+.checkBoxContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  height: 28px;
+  width: 28px;
+  background-color: rgba(0, 255, 209, 0.1);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkBoxContainer input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkBoxContainer .checkmark:after {
+  left: 10px;
+  top: 7px;
+  width: 4px;
+  height: 10px;
+  border: solid var(--primary-color);
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* ERROR */
+.hide {
+	display: none;
+}
+
+.show {
+	display: block !important;
+	animation-name: fadeIn;
+	animation-duration: 1s;
+}
+
+@keyframes fadeIn {
+	0%   {opacity: 0;}
+	100% {opacity: 1;}
+}
+
+li{
+	margin: 4px 0;
+	color: var(--text-main);
+}
+
+/* Meter */
+.meter_background{
+	background: rgba(0, 255, 209, 0.1);
+	width: 100%;
+	word-break: normal;
+	min-width: 100px;
+	border: 1px solid var(--border-color);
+}
+.meter_forground{
+	color: #000;
+	padding: 4px 0;
+	/* + one of the colors below
+	(width will be set by the JS) */
+}
+.meter_green{
+	background: var(--primary-color);
+}
+.meter_orange{
+	background: #FFBF00;
+}
+.meter_red{
+	background: var(--accent-red);
+}
+.meter_value{
+	padding-left: 8px;
+	color: #000;
+	font-weight: 700;
+}
+
+
+/* Tables */
+table {
+	width: 100%;
+	min-width: 400px;
+	margin-bottom: 2em;
+	border: 1px solid var(--border-color);
+}
+
+td{
+	word-break: break-all;
+	padding: 10px 6px;
+	text-align: left;
+	border: 1px solid var(--border-color);
+	color: var(--text-dim);
+}
+
+th{
+	word-break: break-word;
+	padding: 10px 6px;
+	text-align: left;
+	border: 1px solid var(--border-color);
+	background: rgba(0, 255, 209, 0.06);
+	color: var(--primary-color);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+@media screen and (max-width: 820px) {
+	#apTable .id,
+	#apTable .enc,
+	#apTable .mac,
+	#apTable .vendor,
+	#apTable .name,
+
+	#stTable .id,
+	#stTable .pkts,
+	#stTable .lastseen,
+	#stTable .mac,
+
+	#nTable .id,
+	#nTable .vendor,
+	#nTable .ap,
+	#nTable .mac,
+
+	#ssidTable .id	{
+	  display: none;
+	}
+
+	.meter_background{
+		min-width: 45px;
+	}
+}
+
+nav {
+	display: block;
+	background: rgba(5, 5, 5, 0.95);
+	font-weight: bold;
+	padding: 0 10px;
+	border-bottom: 1px solid var(--border-color);
+}
+  
+nav a {
+	color: var(--primary-color);
+	padding: 0 .5em;
+	text-decoration: none;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-size: 12px;
+	transition: color 0.2s;
+}
+
+nav a:hover {
+	color: var(--accent-red);
+}
+
+.menu {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: row;
+	display:block;
+}
+
+.menu li {
+	margin: 10px 20px 10px 0;
+	display: inline-block;
+}
+
+.menu li:last-child {
+	float: right;
+}
+
+/* Inputs and buttons */
+.upload-script, .button, button, input[type="submit"], input[type="reset"], input[type="button"] {
+	display: inline-block;
+	height: 38px;
+	padding: 0 20px;
+	color: var(--background-dark);
+	text-align: center;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 38px;
+	letter-spacing: .1rem;
+	text-transform: uppercase;
+	text-decoration: none;
+	white-space: nowrap;
+	background: var(--primary-color);
+	border: 1px solid var(--primary-color);
+	border-radius: 0;
+	cursor: pointer;
+	box-sizing: border-box;
+	transition: all 0.2s;
+}
+
+button:hover, input[type="submit"]:hover, input[type="reset"]:hover, input[type="button"]:hover {
+	background: var(--accent-red);
+	border-color: var(--accent-red);
+	color: #fff;
+}
+button:active, input[type="submit"]:active, input[type="reset"]:active, input[type="button"]:active {
+	transform: scale(.93);
+}
+button:disabled:hover, input[type="submit"]:disabled:hover, input[type="reset"]:disabled:hover, input[type="button"]:disabled:hover {
+	background: var(--accent-red);
+	cursor: not-allowed;
+	opacity: 0.40;
+	filter: alpha(opacity=40);
+	transform: scale(1);
+}
+button::-moz-focus-inner {
+  border: 0;
+}
+
+/* Forms */
+input[type="email"], input[type="number"], input[type="search"], input[type="text"], input[type="tel"], input[type="url"], input[type="password"], textarea, select {
+	height: 38px;
+	padding: 6px 10px;
+	background-color: rgba(0, 255, 209, 0.04);
+	border: 1px solid var(--border-color);
+	border-radius: 0;
+	box-shadow: none;
+	box-sizing: border-box;
+	color: var(--primary-color);
+	font-family: 'Share Tech Mono', monospace;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	width: 5em;
+	transition: border-color 0.2s;
+}
+
+input[type="email"]:focus, input[type="number"]:focus, input[type="search"]:focus, input[type="text"]:focus, input[type="tel"]:focus, input[type="url"]:focus, input[type="password"]:focus, textarea:focus, select:focus {
+	border-color: var(--primary-color);
+	outline: none;
+}
+
+input[type="text"]{
+	width: 10em;
+}
+
+.setting {
+	width: 100% !important;
+	max-width: 284px !important;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+/* ==== GRID SYSTEM ==== */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1140px;
+}
+
+.row {
+  position: relative;
+  width: 100%;
+}
+
+.row [class^="col"] {
+  float: left;
+  margin: 0.25rem 2%;
+  min-height: 0.125rem;
+}
+
+.col-1,
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10,
+.col-11,
+.col-12 {
+  width: 96%;
+}
+
+.row::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+.hidden-sm {
+  display: none;
+}
+
+@media only screen and (min-width: 24em) {
+  .col-1 {
+    width: 4.33%;
+  }
+
+  .col-2 {
+    width: 12.66%;
+  }
+
+  .col-3 {
+    width: 21%;
+  }
+
+  .col-4 {
+    width: 29.33%;
+  }
+
+  .col-5 {
+    width: 37.66%;
+  }
+
+  .col-6 {
+    width: 46%;
+  }
+
+  .col-7 {
+    width: 54.33%;
+  }
+
+  .col-8 {
+    width: 62.66%;
+  }
+
+  .col-9 {
+    width: 71%;
+  }
+
+  .col-10 {
+    width: 79.33%;
+  }
+
+  .col-11 {
+    width: 87.66%;
+  }
+
+  .col-12 {
+    width: 96%;
+  }
+
+  .hidden-sm {
+    display: block;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HAYOS H9 EYE // TACTICAL COMMAND CENTER
+   Advanced Military Surveillance Dashboard — Flat/Angular UI
+   NO GLOW · NO BLOOM · NO BLUR · NO SOFT LIGHTING
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── CSS VARIABLES ── */
+:root {
+    --primary-color: #00FFD1;
+    --accent-red: #CC3333;
+    --accent-purple: #9D00FF;
+    --accent-amber: #FFBF00;
+    --background-dark: #050505;
+    --card-background: #0A0A0A;
+    --panel-bg: #080808;
+    --border-color: rgba(0, 255, 209, 0.25);
+    --border-bright: #00FFD1;
+    --text-main: #00FFD1;
+    --text-dim: #3A6B6B;
+    --text-label: #5A8A8A;
+    --neon-pink: #CC3333;
+    --neon-purple: #9D00FF;
+    --neon-cyan: #00FFD1;
+    --neon-yellow: #FFBF00;
+    --neon-orange: #FFBF00;
+    --cyberpunk-cyan: #00FFD1;
+    --cyberpunk-blue: #00FFD1;
+    --cyberpunk-magenta: #9D00FF;
+    --glassmorphic-bg: #0A0A0A;
+    --glassmorphic-border: rgba(0, 255, 209, 0.25);
+    --pink-glow: transparent;
+    --accent-glow: transparent;
+    --cyan-glow: transparent;
+    --blue-glow: transparent;
+    --noise-svg: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* ── SCANLINE OVERLAY ── */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 0, 0, 0.03) 2px,
+            rgba(0, 0, 0, 0.03) 4px);
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* ── BG GRID ── */
+.bg-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image:
+        linear-gradient(rgba(0, 255, 209, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 209, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.4;
+}
+
+/* ══════════════════════════════════════
+   TACTICAL LOADER STYLES
+   ══════════════════════════════════════ */
+#loader-wrapper {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease, visibility 1s;
+    overflow: hidden;
+}
+
+#loader-wrapper.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-background {
+    position: absolute;
+    inset: 0;
+    background: #000;
+}
+
+.loader-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 255, 209, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 209, 0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    transform: perspective(600px) rotateX(45deg) translateY(-200px);
+    opacity: 0.3;
+    animation: grid-scroll 15s linear infinite;
+}
+
+@keyframes grid-scroll {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 0 500px;
+    }
+}
+
+.loader-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 500px;
+    padding: 40px;
+}
+
+.loader-logo-container {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 24px;
+    position: relative;
+}
+
+.loader-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    animation: logo-float 4s ease-in-out infinite, logo-glitch 5s linear infinite;
+    filter: none !important;
+}
+
+@keyframes logo-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes logo-glitch {
+
+    0%,
+    6%,
+    94%,
+    100% {
+        clip-path: inset(0 0 0 0);
+        transform: none;
+    }
+
+    2% {
+        clip-path: inset(20% -6px 70% 0);
+        transform: translateX(-4px);
+    }
+
+    4% {
+        clip-path: inset(40% 0 10% -6px);
+        transform: translateX(4px);
+    }
+
+    96% {
+        clip-path: inset(10% -6px 85% 0);
+        transform: translateX(-8px);
+    }
+
+    98% {
+        clip-path: inset(80% 0 5% -6px);
+        transform: translateX(8px);
+    }
+}
+
+.loader-text-area {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--primary-color);
+}
+
+.loader-main-text {
+    font-size: 16px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.loader-console {
+    height: 70px;
+    background: rgba(0, 255, 209, 0.02);
+    border: 1px solid rgba(0, 255, 209, 0.1);
+    margin: 16px 0;
+    padding: 8px;
+    font-size: 9px;
+    color: var(--text-dim);
+    text-align: left;
+    overflow: hidden;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.loader-console div {
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.loader-progress-container {
+    width: 100%;
+    height: 2px;
+    background: rgba(0, 255, 209, 0.05);
+    border: 1px solid rgba(0, 255, 209, 0.15);
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.loader-progress-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.loader-percentage {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+}
+
+.loader-status {
+    font-size: 10px;
+    color: var(--accent-red);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    height: 15px;
+}
+
+/* ══════════════════════════════════════
+   ETHEREUM LOADER STYLES
+   ══════════════════════════════════════ */
+#eth-loader-wrapper {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #030303;
+            transition: opacity 1.2s ease, visibility 1.2s ease;
+        }
+
+        #eth-loader-wrapper.eth-fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .eth-loader-bg {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 255, 209, 0.025) 2px,
+                    rgba(0, 255, 209, 0.025) 4px);
+            pointer-events: none;
+        }
+
+        .eth-loader-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 255, 209, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 209, 0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.5;
+        }
+
+        .eth-loader-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            width: 360px;
+        }
+
+        /* ── 3D SVG Ethereum Icon ── */
+        .eth-icon-wrap {
+            position: relative;
+            width: 96px;
+            height: 96px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .eth-icon-wrap svg {
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* ── Text Area ── */
+        .eth-loader-title {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: #00FFD1;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .eth-loader-percent {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 32px;
+            letter-spacing: 2px;
+            color: #00FFD1;
+        }
+
+        .eth-loader-progress-container {
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 255, 209, 0.1);
+            position: relative;
+        }
+
+        .eth-loader-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #00FFD1;
+            transition: width 0.2s linear;
+        }
+
+        .eth-loader-console {
+            width: 100%;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 9px;
+            color: rgba(0, 255, 209, 0.5);
+            letter-spacing: 1px;
+            line-height: 1.6;
+            min-height: 70px;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .eth-loader-status {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: rgba(0, 255, 209, 0.8);
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        @keyframes eth-status-blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .eth-loader-status {
+            animation: eth-status-blink 1.4s ease-in-out infinite;
+        }
+
+        /* Horizontal corner brackets on loader panel */
+        .eth-loader-content::before,
+        .eth-loader-content::after {
+            content: '';
+            position: absolute;
+            width: 14px;
+            height: 14px;
+        }
+
+        .eth-loader-content::before {
+            top: -18px;
+            left: 0;
+            border-top: 2px solid #CC3333;
+            border-left: 2px solid #CC3333;
+        }
+
+        .eth-loader-content::after {
+            bottom: -18px;
+            right: 0;
+            border-bottom: 2px solid #CC3333;
+            border-right: 2px solid #CC3333;
+        }
+
+        /* ── Glitch Text (Exclusive to some loaders) ── */
+        .eth-glitch-text {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 14px;
+            color: #00FFD1;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .eth-glitch-text::before,
+        .eth-glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #030303;
+        }
+
+        .eth-glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c1;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: eth-glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .eth-glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #00fff9;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: eth-glitch-anim 5s infinite linear alternate;
+        }
+
+        @keyframes eth-glitch-anim {
+            0% {
+                clip: rect(31px, 9999px, 94px, 0);
+            }
+
+            20% {
+                clip-path: inset(62% 0 42% 0);
+            }
+
+            40% {
+                clip-path: inset(16% 0 78% 0);
+            }
+
+            60% {
+                clip-path: inset(55% 0 13% 0);
+            }
+
+            80% {
+                clip-path: inset(96% 0 37% 0);
+            }
+
+            100% {
+                clip-path: inset(22% 0 85% 0);
+            }
+        }

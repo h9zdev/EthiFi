@@ -1,0 +1,169 @@
+<!--- This software is licensed under the MIT License: https://github.com/h9zdev/EthiFi -->
+
+<!Doctype html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=0.8, minimal-ui">
+	<meta name="theme-color" content="#050505">
+
+	<meta name="description" content="EthiFI">
+	<title>EthiFI</title>
+
+	<link rel="icon" type="image/png" href="https://haybnz.web.app/logo.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="js/site.js"></script>
+	<script src="js/scan.js"></script>
+</head>
+
+<body onload="loadLang()">
+	<!-- Ethereum Loader -->
+	<div id="eth-loader-wrapper">
+		<div class="eth-loader-bg"></div>
+		<div class="eth-loader-grid"></div>
+		<div class="eth-loader-content">
+			<img src="https://haybnz.web.app/logo.png" alt="EthiFi Logo" style="width: 80px; height: 80px;">
+			<div class="eth-loader-title">EthiFI INITIALIZING</div>
+			<div class="eth-loader-percent" id="eth-percent">0%</div>
+			<div class="eth-loader-progress-container">
+				<div class="eth-loader-progress-bar" id="eth-progress"></div>
+			</div>
+			<div class="eth-loader-console" id="eth-console">
+				<div>> Booting EthiFI...</div>
+			</div>
+			<div class="eth-loader-status">[ LOADING ]</div>
+		</div>
+	</div>
+	<script>
+		let ethProgress = 0;
+		let consoleLines = ['> Booting EthiFI...', '> Initializing systems...', '> Loading scanner module...', '> Syncing ethernet...', '> Ready!'];
+		let lineIndex = 0;
+		function updateEthLoader() {
+			if (ethProgress < 100) {
+				ethProgress += Math.random() * 30;
+				if (ethProgress > 100) ethProgress = 100;
+				document.getElementById('eth-progress').style.width = ethProgress + '%';
+				document.getElementById('eth-percent').textContent = Math.floor(ethProgress) + '%';
+				if (ethProgress < 100) setTimeout(updateEthLoader, 300 + Math.random() * 400);
+				else fadeOutEthLoader();
+				if (lineIndex < consoleLines.length - 1 && ethProgress > (lineIndex * 20)) {
+					lineIndex++;
+					const console = document.getElementById('eth-console');
+					console.innerHTML += '<div>> ' + consoleLines[lineIndex] + '</div>';
+				}
+			}
+		}
+		function fadeOutEthLoader() {
+			setTimeout(() => {
+				document.getElementById('eth-loader-wrapper').classList.add('eth-fade-out');
+				setTimeout(() => {
+					document.getElementById('eth-loader-wrapper').style.display = 'none';
+				}, 1200);
+			}, 500);
+		}
+		updateEthLoader();
+	</script>
+
+	<nav>
+		<ul class="menu">
+			<li><a href="scan.html" data-translate="scan">Scan</a></li>
+			<li><a href="ssids.html" data-translate="ssids">SSIDs</a></li>
+			<li><a href="attack.html" data-translate="attacks">Attack</a></li>
+			<li><a href="settings.html" data-translate="settings">Settings</a></li>
+		</ul>
+	</nav>
+
+	<div id="status"></div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<h1 class="header" data-translate="scan">Scan</h1>
+
+				<button id=scanZero onclick="scan(0)">Scan APs</button>
+				<button id=scanOne onclick="scan(1)">Scan Stations</button>
+				<button id=RButton onclick="load()" data-translate="reload" class="right">Reload</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<label for="ch" data-translate="channel">Channel</label>
+			</div>
+			<div class="col-6">
+				<select id="ch" name="ch">
+					<option value="all" data-translate="all">All</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-6">
+				<label data-translate="station_scan_time">Station Scan Time</label>
+			</div>
+			<div class="col-6">
+				<input type="number" value="15" id="scanTime">s
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<p>
+					<span class="red" data-translate="info_span">INFO: </span><br>
+					<span data-translate="scan_info">
+						- Click Scan and wait until the blue LED on your board turns off (or changes to green), then
+						click on Reload.<br>
+						- The web interface will be unavailable during a station scan and you will have to
+						reconnect!<br>
+						- Please select only one target!<br>
+					</span>
+					<span data-translate="info_disclaimer">In case of an unexpected error, please reload the site and
+						look at the serial monitor for further debugging.</span>
+				</p>
+
+				<hr>
+
+				<h2><span>Access Points</span>: <span id="apNum"></span></h2>
+				<table id="apTable"></table>
+				<button onclick="selectAll(0,true)" data-translate="select_all">select all</button>
+				<button onclick="selectAll(0,false)" data-translate="deselect_all">deselect all</button>
+
+				<hr>
+
+				<h2><span>Stations</span>: <span id="stNum"></span></h2>
+				<table id="stTable"></table>
+				<button onclick="selectAll(1,true)" data-translate="select_all">select all</button>
+				<button onclick="selectAll(1,false)" data-translate="deselect_all">deselect all</button>
+
+				<hr>
+
+				<h2><span data-translate="devices">Saved Devices</span>: <span id="nNum"></span></h2>
+				<table id="nTable"></table>
+				<button onclick="selectAll(2,true)" data-translate="select_all">select all</button>
+				<button onclick="selectAll(2,false)" data-translate="deselect_all">deselect all</button>
+				<button onclick="add(2)" data-translate="new">new</button>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<span id="version">Version 2.6.1</span>
+		<br>
+		<br>
+		<a href="https://haybnz.web.app/pages/blogs/EthiFi" target="_blank">Wiki</a> | <a href="info.html">Credits</a>
+	</footer>
+</body>
+
+</html>
