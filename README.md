@@ -21,8 +21,6 @@
 
 </div>
 
-
-
 ## 🧭 What is EthiFi?
 
 **EthiFi** is a low-cost, open-source WiFi pentesting platform built on the **ESP8266** microcontroller. Designed for security researchers, students, and enthusiasts who want to learn about wireless network vulnerabilities — without spending a fortune.
@@ -59,7 +57,7 @@
 | 💻 **Web UI** | Control everything from a browser — no app needed |
 | 💾 **Affordable Hardware** | Runs on ~$3 ESP8266 boards |
 
----
+
 
 ## 🔌 Supported Hardware
 
@@ -72,7 +70,7 @@ EthiFi runs on any ESP8266-based board. Recommended options:
 | ESP-01 | ~$1–2 | Minimal, needs USB adapter |
 | DSTIKE Deauther | ~$10–15 | Has OLED + dedicated design |
 
----
+
 
 ## 💾 Flash Size
 
@@ -92,7 +90,7 @@ Make sure to select the correct flash size for your specific ESP8266 module befo
 
 > 💡 When in doubt, try **4MB** — most modern NodeMCU and D1 Mini boards ship with 4MB flash.
 
----
+
 
 ## 🛠️ Installation
 
@@ -111,7 +109,7 @@ Make sure to select the correct flash size for your specific ESP8266 module befo
 
 ![NodeMCU Flasher Settings](https://raw.githubusercontent.com/wiki/spacehuhn/esp8266_deauther/img/flash_settings_nodemcu_flasher.jpg)
 
-
+---
 
 ### Method 2 — ⚙️ Arduino IDE *(Full Source)*
 
@@ -142,7 +140,7 @@ https://raw.githubusercontent.com/SpacehuhnTech/arduino/main/package_spacehuhn_i
 
 **9.** Hit **Upload** ✅
 
-
+---
 
 ## 🔧 Driver Installation
 
@@ -152,7 +150,7 @@ Most ESP8266 boards use one of two USB-to-Serial chips: **CP2102** or **CH340**.
 
 > 💡 **How to tell which chip you have:** Look at the small IC near the USB port on your board. It will be labeled `CP2102` or `CH340G`.
 
----
+
 
 ### 🔵 CP2102 Driver *(Silicon Labs)*
 
@@ -171,7 +169,7 @@ Used on many NodeMCU v1, DSTIKE boards, and others.
 5. Open **Device Manager → Ports (COM & LPT)** — you should see:
    `Silicon Labs CP210x USB to UART Bridge (COMx)`
 
----
+
 
 ### 🟢 CH340 / CH341 Driver *(WCH)*
 
@@ -210,6 +208,33 @@ Once flashed:
 
 
 
+## 💻 Web UI
+
+EthiFi is controlled entirely through a browser-based interface — no app needed.
+
+<div align="center">
+
+**Loading Screen**
+![EthiFi Loader](https://raw.githubusercontent.com/H9yzz/H9yzz/main/ETHFI-LOADER.png)
+
+**Home**
+![EthiFi Home](https://raw.githubusercontent.com/H9yzz/H9yzz/main/HOME%20.png)
+
+**Network Scan**
+![EthiFi Scan](https://raw.githubusercontent.com/H9yzz/H9yzz/main/SCAN.png)
+
+**SSID Manager**
+![EthiFi SSID](https://raw.githubusercontent.com/H9yzz/H9yzz/main/SSID.png)
+
+**Attacks**
+![EthiFi Attacks](https://raw.githubusercontent.com/H9yzz/H9yzz/main/ATTCK.png)
+
+**Settings**
+![EthiFi Settings](https://raw.githubusercontent.com/H9yzz/H9yzz/main/SETTNG.png)
+
+</div>
+
+
 ## 🩺 Troubleshooting
 
 ### ❌ Board not detected / No COM port shown
@@ -219,7 +244,6 @@ Once flashed:
 - Try a different USB port on your computer
 - On Windows: open **Device Manager** and look for unknown devices with ⚠️ icons
 
----
 
 ### ❌ Flash fails or board disconnects mid-flash
 
@@ -259,11 +283,11 @@ Once flashed:
 - Make sure no other app is using the port (close any open serial monitors)
 - Press and hold the **BOOT** button on your board during upload, release when upload starts
 
----
+
 
 > 📖 For more help, visit the **[EthiFi Wiki](https://github.com/h9zdev/EthiFi/wiki)** or open an **[Issue](https://github.com/h9zdev/EthiFi/issues)**.
 
-
+---
 
 ## 📥 Quick Downloads
 
@@ -301,6 +325,8 @@ Contributions, issues, and feature requests are welcome!
 *Built with a passion for affordable, accessible cybersecurity education.*
 
 </div>
+
+
 
 ## ⚖️ Disclaimer
 
