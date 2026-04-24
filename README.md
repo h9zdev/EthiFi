@@ -196,7 +196,7 @@ Used on NodeMCU v3 (Lolin), Wemos D1 Mini, and many cheap clone boards.
 Once flashed:
 
 1. 📶 Connect to the **EthiFi WiFi network** from your phone or laptop
-   - Default SSID: `EthiFi`
+   - Default SSID: `pwned`
    - Default Password: `deauther`
 
 2. 🌐 Open your browser and navigate to:
